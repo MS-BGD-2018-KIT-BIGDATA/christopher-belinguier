@@ -3,7 +3,12 @@ import json
 import pandas as pd
 from bs4 import BeautifulSoup
 
-my_token = '973a41e75d37045e0bd24e31d494511deb525c1b'
+
+def get_token(path):
+    f = open(path, 'r')
+    my_token = str(f.read())
+    return my_token
+
 
 def get_soup_from_url(my_url):
     res = requests.get(my_url)
@@ -48,6 +53,7 @@ def find_contributors(url):
 
 
 if __name__ == '__main__':
+    my_token = get_token('/Users/christopherbelinguier/github/token_git.txt')
     url = 'https://gist.github.com/paulmillr/2657075'
     list_contributors = find_contributors(url)
     print(list_contributors)

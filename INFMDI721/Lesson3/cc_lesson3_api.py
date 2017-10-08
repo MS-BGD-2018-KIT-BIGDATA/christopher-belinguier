@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import sys
 import requests
 import googlemaps
 import re
@@ -42,8 +43,12 @@ def get_distance_matrix(cities):
 
 if __name__ == '__main__':
     # Variable IN
-    nb_cities = 10
-    path_result = 'distances.csv'
+    if len(sys.argv) == 3:
+        nb_cities = int(sys.argv[1])
+        path_result = str(sys.argv[2])
+    else:
+        nb_cities = 10
+        path_result = 'distances.csv'
     # Get token
     my_token = get_token('/Users/christopherbelinguier/github/token_google.txt')
     # Crawling
@@ -58,7 +63,3 @@ if __name__ == '__main__':
             df.at[cities[idx], cities[idy]] = elem["distance"]["text"]
     print(df)
     df.to_csv(path_result)
-
-
-
-

@@ -51,9 +51,19 @@ def get_details(link_detail):
     annee = int(re.sub(r"\D", "", details[4].text))
     kilometrage = int(re.sub(r"\D", "", details[5].text))
     vendeur = 'Professionnel' if link_detail[1] == 1 else 'Particulier'
+    description = re.sub(r"\W", "", details[-1].text.lower())
+    # print(description)
+    version = "NaN"
+    if "intens" in description:
+        version = "intens"
+    elif "life" in description:
+        version = "life"
+    elif "zen" in description:
+        version = "zen"
+    print(version)
     # telephone = soup.find_all(class_='phone_number')
     # print(telephone)
-    return [annee, prix, kilometrage, vendeur]
+    return [annee, version, prix, kilometrage, vendeur]
 
 
 if __name__ == '__main__':
@@ -70,9 +80,9 @@ if __name__ == '__main__':
             for link in link_details:
                 fichier.append(get_details(link))
         print("length fichier : " + str(len(fichier)))
-        labels = ['Annee', 'Prix', 'Kilometrage', 'Vendeur']
+        labels = ['Annee', 'Version', 'Prix', 'Kilometrage', 'Vendeur']
         df = pd.DataFrame.from_records(fichier, columns=labels)
-        df = df.sort_values(['Annee', 'Prix', 'Kilometrage', 'Vendeur'])
+        df = df.sort_values(['Annee', 'Version', 'Prix', 'Kilometrage', 'Vendeur'])
         print(df)
         # Centrale
         # Ajouter colonne centrale +  groupe modele ou année...
@@ -82,7 +92,6 @@ if __name__ == '__main__':
         df.to_csv(region + '.csv')
 
 # Travail restant, ajouter :
-#     version ( il y en a 3)
 #     numero tel
-#     prix de l'Argus du modèle'
+#     prix de l'Argus du modèle
 #     bool voiture est plus chère ou moins chère que sa cote moyenne
